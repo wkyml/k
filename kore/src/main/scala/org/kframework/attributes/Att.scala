@@ -103,6 +103,7 @@ object Att {
   val HOOK = "hook"
   val IDEM = "idem"
   val IMPURE = "impure"
+  val KAST = "kast"
   val KORE = "kore"
   val LABEL = "label"
   val LEMMA = "lemma"
