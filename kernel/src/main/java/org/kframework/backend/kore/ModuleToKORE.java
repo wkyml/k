@@ -180,6 +180,7 @@ public class ModuleToKORE {
         collectionSorts.add("MAP.Map");
         collectionSorts.add("LIST.List");
         collectionSorts.add("ARRAY.Array");
+        collectionSorts.add("RANGEMAP.RangeMap");
         attributes.remove(HAS_DOMAIN_VALUES);
         if (attributes.containsKey("token")) {
             attributes.put(HAS_DOMAIN_VALUES, false);
