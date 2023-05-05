@@ -181,17 +181,10 @@ public class Kompile {
 
         ConfigurationInfoFromModule configInfo = new ConfigurationInfoFromModule(kompiledDefinition.mainModule());
 
-        boolean isKast = excludedModuleTags.contains(Att.KORE());
-        Sort rootCell;
-        if (isKast) {
-          rootCell = configInfo.getRootCell();
-        } else {
-          rootCell = Sorts.GeneratedTopCell();
-        }
+        Sort rootCell = Sorts.GeneratedTopCell();
         CompiledDefinition def = new CompiledDefinition(kompileOptions, kompileOptions.outerParsing, kompileOptions.innerParsing, globalOptions, parsedDef, kompiledDefinition, files, kem, configInfo.getDefaultCell(rootCell).klabel());
 
-        boolean isKore = excludedModuleTags.contains(Att.KAST());
-        if (isKore && (!kompileOptions.jitParser || kompileOptions.lr1Parser)) {
+        if (!kompileOptions.jitParser || kompileOptions.lr1Parser) {
             if (def.configurationVariableDefaultSorts.containsKey("$PGM")) {
                 String filename = getBisonParserFilename(def.programStartSymbol.name(), def.mainSyntaxModuleName());
                 File outputFile = files.resolveKompiled(filename);
@@ -423,13 +416,12 @@ public class Kompile {
     public void structuralChecks(scala.collection.Set<Module> modules, Module mainModule, Option<Module> kModule, Set<String> excludedModuleTags) {
         checkAnywhereRules(modules);
         boolean isSymbolic = excludedModuleTags.contains(Att.CONCRETE());
-        boolean isKast = excludedModuleTags.contains(Att.KORE());
         CheckRHSVariables checkRHSVariables = new CheckRHSVariables(errors, !isSymbolic, kompileOptions.backend);
         stream(modules).forEach(m -> stream(m.localSentences()).forEach(checkRHSVariables::check));
 
-        stream(modules).forEach(m -> stream(m.localSentences()).forEach(new CheckAtt(errors, kem, mainModule, isSymbolic && isKast)::check));
+        stream(modules).forEach(m -> stream(m.localSentences()).forEach(new CheckAtt(errors, kem, mainModule)::check));
 
-        stream(modules).forEach(m -> stream(m.localSentences()).forEach(new CheckConfigurationCells(errors, m, isSymbolic && isKast)::check));
+        stream(modules).forEach(m -> stream(m.localSentences()).forEach(new CheckConfigurationCells(errors, m)::check));
 
         stream(modules).forEach(m -> stream(m.localSentences()).forEach(new CheckSortTopUniqueness(errors, m)::check));
 
@@ -439,9 +431,7 @@ public class Kompile {
 
         stream(modules).forEach(m -> stream(m.localSentences()).forEach(new CheckHOLE(errors, m)::check));
 
-        if (!(isSymbolic && isKast)) { // if it's not the java backend
-            stream(modules).forEach(m -> stream(m.localSentences()).forEach(new CheckTokens(errors, m)::check));
-        }
+        stream(modules).forEach(m -> stream(m.localSentences()).forEach(new CheckTokens(errors, m)::check));
 
         stream(modules).forEach(m -> stream(m.localSentences()).forEach(new CheckK(errors)::check));
 
