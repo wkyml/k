@@ -2,7 +2,7 @@ MAKEFILE_PATH := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 DEF=imp
 DEFDIR=concrete
 EXT=imp
-KOMPILE_FLAGS+=--gen-glr-bison-parser --enable-search
+KOMPILE_FLAGS+=--enable-search
 KRUN_FLAGS=--output none
 
 include $(MAKEFILE_PATH)/../../../find-k.mak
