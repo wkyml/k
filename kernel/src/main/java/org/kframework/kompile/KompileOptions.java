@@ -96,7 +96,7 @@ public class KompileOptions implements Serializable {
     @Parameter(names="--read-only-kompiled-directory", description="Files in the generated kompiled directory should be read-only to other frontend tools.")
     public boolean readOnlyKompiledDirectory = false;
 
-    @Parameter(names="--concrete-rules", description="List of rule labels to be considered concrete, in addition to " +
+    @Parameter(names="--concrete-rules", description="Comma-separated list of rule labels to be considered concrete, in addition to " +
             "rules marked with `[concrete]` attribute")
     public List<String> extraConcreteRuleLabels = Collections.emptyList();
 
@@ -144,4 +144,8 @@ public class KompileOptions implements Serializable {
 
     @Parameter(names="--enable-kore-antileft", description="Enable generation of legacy antileft priority predicates ")
     public boolean enableKoreAntileft;
+
+    @Parameter(names="--non-deterministic-cooling", description="Comma-separated list of syntax and rule labels " +
+            "which permit cooling before the term under evaluation is fully reduced to a result.")
+    public List<String> nonDeterministicCoolLabels = Collections.emptyList();
 }
